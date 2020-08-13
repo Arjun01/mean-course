@@ -1,9 +1,39 @@
 <mat-card>
-  <mat-form-field>
-    <textarea matInput rows="6" [(ngModel)]="enteredValue"></textarea>
-  </mat-form-field>
-  <button
-  mat-raised-button
-  color="accent"
-   (click) = "onAddPost()">Save Post</button>
+  <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Post Title</mat-label>
+      <input
+       matInput
+       type="text"
+       name="title"
+       ngModel
+       required
+       minlength="3"
+       #title ="ngModel">
+       <mat-error *ngIf="title.invalid && !title.hasError('required')">
+        Title lenght should be at least 3 characters.
+      </mat-error>
+       <mat-error *ngIf="title.hasError('required')">
+        Title is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Create your post here</mat-label>
+      <textarea
+      matInput
+       rows="4"
+       name="content"
+       ngModel
+       required
+       #content ="ngModel"></textarea>
+       <mat-error *ngIf="content.hasError('required')">
+        Content is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <button
+    mat-raised-button
+    color="accent"
+     type="submit">Save Post</button>
+  </form>
+
 </mat-card>
