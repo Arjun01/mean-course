@@ -6,3 +6,9 @@
 .info-text{
   text-align: center;
 }
+
+.button-container{
+  display: flex;
+  justify-content: center;
+  width: 50px;
+}
