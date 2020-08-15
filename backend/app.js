@@ -1,7 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const Post = require('./models/post');
+const mongoose = require('mongoose');
 
 const app = express();
+mongoose.connect("mongodb+srv://jun:7oJAlqmMu9qaGTec@cluster0.cexot.mongodb.net/node-angular?retryWrites=true&w=majority")
+.then(()=>{
+  console.log("Connected to datbase!");
+})
+.catch(()=>{
+  console.log("Connection failed!");
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -16,33 +25,22 @@ app.use((req, res, next) => {
 
 
 app.post("/api/posts",(req, res, next) =>{
-  const post = req.body;
-  console.log(post);
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content
+  });
+  post.save();
   res.status(201).json({message: 'Post added Successfully'});
 });
 
 app.get('/api/posts',(req,res,next) => {
-  const posts = [
-    { id: "asldjfalsfsa00001",
-      title:'First server side post',
-    content: 'This is coming from the server!!'},
-    { id: "asldjfalsfsa00002",
-      title:'Second server side post',
-    content: 'This is coming from the server!!'},
-    { id: "asldjfalsfsa00003",
-      title:'Third server side post',
-    content: 'This is coming from the server!!'},
-    { id: "asldjfalsfsa00004",
-      title:'Fourth server side post',
-    content: 'This is coming from the server!!'},
-    { id: "asldjfalsfsa00005",
-      title:'Fifth server side post',
-    content: 'This is coming from the server!!'},
+  Post.find().then(documents => {
+    res.status(200).json({
+      message:'posts sent successfully!',
+      posts: documents
 
-  ];
-  res.status(200).json({
-    message:'posts sent successfully!',
-    posts: posts
+  });
+
   });
 });
 
